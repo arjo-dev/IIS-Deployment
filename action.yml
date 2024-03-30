@@ -1,14 +1,11 @@
 name: "UmbHost Web Deploy"
 description: "Deploy projects directly to UmbHost"
 inputs:
-  website-name:
-    description: "IIS website name"
-    required: true
   server-computer-name:
-    description: "IIS server computer name"
+    description: "IIS server computer name (the IP of the server)"
     required: true
   server-username:
-    description: "IIS server username"
+    description: "IIS server username (should also be the name of the app pool)"
     required: true
   server-password:
     description: "IIS server password"
@@ -21,19 +18,22 @@ inputs:
     description: "The location of the SetParameters.xml file"
     required: true
     default: '""'
-  source-fileName:
-    description: "The name of the file to be deployed"
-    required: true
-    default: 'Umbraco.Web.zip'
 runs:
   using: "composite"
   steps:
-    - name: Stop Application Pool
+    - name: Setting app into offline mode
       shell: pwsh
       run: >
-        ${{ github.action_path }}/Scripts/Set-ApplicationPool.ps1
-        -recycleMode StopAppPool
-        -recycleApp ${{ inputs.website-name }}
+        ${{ github.action_path }}/Scripts/Set-AppOffline.ps1
+        -username ${{ inputs.server-username }}
+        -password "${{ inputs.server-password }}"
+        -localDirectory ${{ github.workspace }}
+        -serverAddress ${{ inputs.server-computer-name }}
+    - name: Restarting the Application Pool
+      shell: pwsh
+      run: >
+        ${{ github.action_path }}/Scripts/Restart-ApplicationPool.ps1
+        -recycleMode RecycleAppPool
         -computerName ${{ inputs.server-computer-name }}
         -username ${{ inputs.server-username }}
         -password "${{ inputs.server-password }}"
@@ -41,19 +41,15 @@ runs:
       shell: pwsh
       run: >
         ${{ github.action_path }}/Scripts/Deploy-ApplicationPackage.ps1
-        -source ${{ inputs.source-path }}
         -recycleApp ${{ inputs.website-name }}
         -computerName ${{ inputs.server-computer-name }}
         -username ${{ inputs.server-username }}
         -password "${{ inputs.server-password }}"
-        -paramFile ${{ inputs.source-paramFile }}
-        -fileName ${{ inputs.source-fileName }}
-    - name: Start Application Pool
+        -localDirectory ${{ github.workspace }}
+    - name: Remove app offline
       shell: pwsh
       run: >
-        ${{ github.action_path }}/Scripts/Set-ApplicationPool.ps1
-        -recycleMode StartAppPool
-        -recycleApp ${{ inputs.website-name }}
+        ${{ github.action_path }}/Scripts/Remove-AppOffline.ps1
         -computerName ${{ inputs.server-computer-name }}
         -username ${{ inputs.server-username }}
         -password "${{ inputs.server-password }}"
