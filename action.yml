@@ -27,7 +27,7 @@ runs:
         ${{ github.action_path }}/Scripts/Set-AppOffline.ps1
         -username ${{ inputs.server-username }}
         -password "${{ inputs.server-password }}"
-        -localDirectory ${{ github.workspace }}
+        -localDirectory ${{ github.workspace }}/artifacts/WebApplication
         -serverAddress ${{ inputs.server-computer-name }}
     - name: Restarting the Application Pool
       shell: pwsh
@@ -45,7 +45,7 @@ runs:
         -computerName ${{ inputs.server-computer-name }}
         -username ${{ inputs.server-username }}
         -password "${{ inputs.server-password }}"
-        -localDirectory ${{ github.workspace }}
+        -localDirectory ${{ github.workspace }}/artifacts/WebApplication
     - name: Remove app offline
       shell: pwsh
       run: >
