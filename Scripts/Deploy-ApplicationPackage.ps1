@@ -24,7 +24,7 @@ param
  "-skip:absolutePath=.*wwwroot\\media",
  "-enableRule:DoNotDeleteRule",
 
- "-source:contentPath=${localDirectory}/artifacts/WebApplication",
+ "-source:contentPath=${localDirectory}",
  (
     "-dest:" + 
       "contentPath=${username}," +
