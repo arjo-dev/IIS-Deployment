@@ -18,9 +18,9 @@ $msdeployArguments =
         "recycleApp=${username}," +
         "recycleMode=${recycleMode}," +
         "computerName=${computerNameArgument}," + 
-        "username=`"${username}`"," +
-        "password=`"${password}`"," +
-        "AuthType=`"Basic`""
+        "username='${username}'," +
+        "password='${password}'," +
+        "AuthType='Basic'"
     )
 
 & $msdeploy $msdeployArguments

@@ -15,9 +15,9 @@ $msdeployArguments =
     ("-dest:" + 
         "contentPath=${username}/App_offline.htm,"+
         "computerName=${computerNameArgument},"+
-        "username=`"${username}`"," +
-        "password=`"${password}`"," +
-        "AuthType=`"Basic`""
+        "username='${username}'," +
+        "password='${password}'," +
+        "AuthType='Basic'"
     )
 
 

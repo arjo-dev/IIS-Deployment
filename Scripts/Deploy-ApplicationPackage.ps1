@@ -29,9 +29,9 @@ param
     "-dest:" + 
       "contentPath=${username}," +
       "computerName=${computerNameArgument}," + 
-      "username=`"${username}`"," +
-      "password=`"${password}`"," +
-      "AuthType=`"Basic`""
+      "username='${username}'," +
+      "password='${password}'," +
+      "AuthType='Basic'"
 )
 
  #if ($paramFile){
