@@ -1,0 +1,54 @@
+
+name: STAGING Deployment
+
+on:
+  push:
+    branches: [ release/staging ]
+env:
+    SolutionName: ${{ secrets.SOLUTION_NAME }}
+    FrontEndFolder: ${{ secrets.FRONTEND_FOLDER }}
+    BuildPlatform: Any CPU
+    BuildConfiguration: Release
+
+jobs:
+  build:
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        node: [ 20 ]
+    
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v3.0.0
+          
+        - name: Frontend build
+          uses: actions/setup-node@v3
+          with:
+            node-version: ${{ matrix.node }}
+            
+        - run: |
+            cd ${{ github.workspace }}${{ env.FrontEndFolder }}
+            npm ci
+            npm run build
+            cd ..
+            dotnet restore
+            
+        - name: Publish site
+          run: |
+            dotnet publish ${{env.SolutionName}} -c staging -o ${{ github.workspace }}/artifacts/WebApplication
+            
+        - name: Bumping cache version
+          run: |
+            (Get-Content ${{ github.workspace }}/artifacts/WebApplication/appsettings.Staging.json) | ForEach-Object { $_ -replace "{CACHE_VERSION}", "${{ github.run_number }}" } | Set-Content ${{ github.workspace }}/artifacts/WebApplication/appsettings.Staging.json
+            
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    
+    steps: 
+        - name: Deploy to IIS
+          uses: arjo-dev/iis-deployment@v1.0.4
+          with:
+            server-computer-name: ${{ secrets.STAGING_SERVER_COMPUTER_NAME }}
+            server-username: ${{ secrets.STAGING_USERNAME }}
+            server-password: ${{ secrets.STAGING_PASSWORD }}
