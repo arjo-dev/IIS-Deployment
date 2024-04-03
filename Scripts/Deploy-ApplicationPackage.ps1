@@ -1,12 +1,9 @@
 param
  (
-   [string]$recycleApp,
    [string]$computerName,
    [string]$username,
    [string]$password,
-   [string]$paramFile,
    [string]$localDirectory
-
  )
 
  $msdeploy = "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe";

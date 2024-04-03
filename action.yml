@@ -41,7 +41,6 @@ runs:
       shell: pwsh
       run: >
         ${{ github.action_path }}/Scripts/Deploy-ApplicationPackage.ps1
-        -recycleApp ${{ inputs.website-name }}
         -computerName ${{ inputs.server-computer-name }}
         -username ${{ inputs.server-username }}
         -password "${{ inputs.server-password }}"

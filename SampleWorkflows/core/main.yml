@@ -47,7 +47,7 @@ jobs:
     
     steps: 
         - name: Deploy to IIS
-          uses: arjo-dev/iis-deployment@v1.0.4
+          uses: arjo-dev/iis-deployment@v1.0.5
           with:
             server-computer-name: ${{ vars.SERVER_COMPUTER_NAME }}
             server-username: ${{ vars.USERNAME }}
