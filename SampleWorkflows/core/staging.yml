@@ -5,8 +5,8 @@ on:
   push:
     branches: [ release/staging ]
 env:
-    SolutionName: ${{ secrets.SOLUTION_NAME }}
-    FrontEndFolder: ${{ secrets.FRONTEND_FOLDER }}
+    SolutionName: ${{ vars.SOLUTION_NAME }}
+    FrontEndFolder: ${{ vars.FRONTEND_FOLDER }}
     BuildPlatform: Any CPU
     BuildConfiguration: Release
 
@@ -49,6 +49,6 @@ jobs:
         - name: Deploy to IIS
           uses: arjo-dev/iis-deployment@v1.0.4
           with:
-            server-computer-name: ${{ secrets.STAGING_SERVER_COMPUTER_NAME }}
-            server-username: ${{ secrets.STAGING_USERNAME }}
+            server-computer-name: ${{ vars.STAGING_SERVER_COMPUTER_NAME }}
+            server-username: ${{ vars.STAGING_USERNAME }}
             server-password: ${{ secrets.STAGING_PASSWORD }}
